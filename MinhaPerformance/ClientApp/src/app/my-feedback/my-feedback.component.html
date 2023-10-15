@@ -1,0 +1,68 @@
+<h1>Meus Feedbacks</h1>
+<h2>Feedbacks Recebidos</h2>
+<div class="d-flex justify-content-center" *ngIf="this.isLoadingReceived">
+  <div class="spinner-border" role="status">
+  </div>
+</div>
+<ng-container [ngTemplateOutlet]="receivedFeedbackItem" *ngFor="let feedback of this.receivedFeedbacks" [ngTemplateOutletContext]="feedback"></ng-container>
+<span *ngIf="this.receivedFeedbacks.length == 0 && !this.isLoadingReceived">Nenhum feedback encontrado</span>
+
+<h2>Feedbacks Enviados</h2>
+<div class="d-flex justify-content-center" *ngIf="this.isLoadingSent">
+  <div class="spinner-border" role="status">
+  </div>
+</div>
+<ng-container [ngTemplateOutlet]="sentFeedbackItem" *ngFor="let feedback of this.sentFeedbacks" [ngTemplateOutletContext]="feedback"></ng-container>
+<span *ngIf="this.sentFeedbacks.length == 0  && !this.isLoadingSent">Nenhum feedback encontrado</span>
+
+<ng-template #receivedFeedbackItem
+              let-id="id"
+              let-provedor="provedor"
+              let-feedback="feedback"
+              let-dataCriacao="dataCriacao"
+              let-viewed="visualizadoEm">
+  <div class="card mb-3 feedback-item">
+    <div class="row g-0">
+      <div class="col-md-2">
+        <img
+          [src]="provedor.pictureURL"
+          style="height: 175px; width: 200px; object-fit: cover" class="img-fluid feedback-user-thumb" />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{provedor.userName}}
+          </h5>
+          <p class="card-text">
+            <small class="text-muted">{{ dataCriacao | date:'fullDate' }}</small>
+            <br>
+            <span>{{ feedback.tipo }}</span>
+          </p>
+          <button type="button" class="btn btn-secondary" [routerLink]="['/view-feedback/', id]">Visualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #sentFeedbackItem
+              let-id="id"
+              let-receptor="receptor"
+              let-feedback="feedback"
+              let-dataCriacao="dataCriacao">
+  <div class="card mb-3 feedback-item">
+    <div class="row g-0">
+      <div class="col-md-1">
+        <img
+        [src]="receptor.pictureURL"
+        style="height: 100px; width: 100px; object-fit: cover;" class="img-fluid feedback-user-thumb">
+      </div>
+      <div class="col-md-11">
+        <div class="card-body bg-light" style="height: 100px">
+          <h5 class="card-title"><a [routerLink]="['/view-feedback/', id]" class="text-decoration-none">{{receptor.userName}}</a></h5>
+          <p class="card-text"><small class="text-muted">{{ dataCriacao | date:'fullDate' }}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,87 @@
+<h1>Enviar feedback</h1>
+<div class="form w-75 m-auto bg-light">
+  <div class="form-floating mb-3" *ngIf="this.isLoadingFeedback">
+    <select class="form-select" id="feedbackTypeSelect" disabled="true">
+      <option selected>Carregando...</option>
+    </select>
+    <label for="feedbackTypeSelect">Tipo de feedback: </label>
+  </div>
+
+  <div class="form-floating mb-3" *ngIf="!this.isLoadingFeedback">
+    <select class="form-select" id="feedbackTypeSelect" (change)="this.selectFeedbackType($event)">
+      <option selected>Selecione o tipo de feedback...</option>
+      <option *ngFor="let feedback of this.feedbackTypes" [value]="feedback.id">{{ feedback.tipo }}</option>
+    </select>
+    <label for="feedbackTypeSelect">Tipo de feedback: </label>
+  </div>
+
+  <div *ngIf="!this.selectedFeedbackType">Selecione um tipo de feedback da lista acima.</div>
+
+  <fieldset class="row mb-3" *ngIf="this.selectedFeedbackType">
+    <div class="form-floating mb-3" *ngIf="this.isLoadingUsers">
+      <select class="form-select" id="feedbackTypeSelect" disabled="true">
+        <option selected>Carregando...</option>
+      </select>
+      <label for="feedbackTypeSelect">Receptor: </label>
+    </div>
+
+    <div class="form-floating mb-3" *ngIf="!this.isLoadingUsers">
+      <select class="form-select" id="userSelect" [(ngModel)]="this.feedbackHistoryObj.receptorId">
+        <option *ngFor="let user of this.users" [value]="user.id">{{ user.userName }} ({{ user.email }})</option>
+      </select>
+      <label for="userSelect">Receptor: </label>
+    </div>
+
+    <div class="mb-3">
+      <label for="formGroupExampleInput" class="form-label">Data</label>
+      <input type="text" class="form-control" id="dataCriacao" [ngModel]="this.feedbackHistoryObj.dataCriacao.toLocaleDateString('pt-BR')" disabled="true">
+    </div>
+
+    <div *ngFor="let criterio of this.selectedFeedbackType?.criterios">
+      <ng-container *ngIf="criterio.quantitativo" [ngTemplateOutlet]="quantitativeCriteria"
+        [ngTemplateOutletContext]="criterio"></ng-container>
+      <ng-container *ngIf="!criterio.quantitativo" [ngTemplateOutlet]="qualitativeCriteria"
+        [ngTemplateOutletContext]="criterio"></ng-container>
+    </div>
+
+    <div class="row d-flex justify-content-center m-3">
+      <div class="col-6 d-flex justify-content-center">
+        <button type="button" class="btn" [ngClass]="{'btn-primary': this.canSave(), 'btn-secondary': !this.canSave()}" (click)="this.sendFeedback()" [disabled]="!this.canSave()">Enviar Feedback</button>
+      </div>
+    </div>
+  </fieldset>
+
+</div>
+
+<ng-template #quantitativeCriteria let-id="id" let-titulo="titulo">
+  <legend class="col-form-label col-12 pt-0">{{ titulo }}</legend>
+  <div class="col-12 mb-3">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" [name]="id" (change)="this.changeFeedback(id, true, '1')" id="inlineRadio1" value="1">
+      <label class="form-check-label" for="inlineRadio1">1</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" [name]="id" (change)="this.changeFeedback(id, true, '2')" id="inlineRadio2" value="2">
+      <label class="form-check-label" for="inlineRadio2">2</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" [name]="id" (change)="this.changeFeedback(id, true, '3')" id="inlineRadio3" value="3">
+      <label class="form-check-label" for="inlineRadio1">3</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" [name]="id" (change)="this.changeFeedback(id, true, '4')" id="inlineRadio4" value="4">
+      <label class="form-check-label" for="inlineRadio1">4</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" [name]="id" (change)="this.changeFeedback(id, true, '5')" id="inlineRadio5" value="5">
+      <label class="form-check-label" for="inlineRadio1">5</label>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #qualitativeCriteria let-id="id" let-titulo="titulo">
+  <div class="mb-3">
+    <label for="formGroupExampleInput" class="form-label">{{ titulo }}</label>
+    <input type="text" class="form-control" [id]="'input' + id" (keyup)="this.changeFeedback(id, false)" placeholder="Insira seu feedback">
+  </div>
+</ng-template>

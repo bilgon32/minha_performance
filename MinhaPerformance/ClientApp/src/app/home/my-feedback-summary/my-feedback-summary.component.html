@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center" *ngIf="this.isLoadingReceived">
+  <div class="spinner-border" role="status">
+  </div>
+</div>
+<ng-container [ngTemplateOutlet]="feedbackItem" *ngFor="let feedback of this.receivedFeedbacks" [ngTemplateOutletContext]="feedback"></ng-container>
+<span *ngIf="this.receivedFeedbacks.length == 0 && !this.isLoadingReceived">Nenhuma atividade recente</span>
+
+<ng-template #feedbackItem
+              let-id="id"
+              let-provedor="provedor"
+              let-feedback="feedback"
+              let-dataCriacao="dataCriacao">
+  <div class="card mb-3 feedback-item">
+    <div class="row g-0">
+      <div class="col-md-1">
+        <img
+        [src]="provedor.pictureURL"
+        style="height: 100px; width: 100px; object-fit: cover;" class="img-fluid feedback-user-thumb">
+      </div>
+      <div class="col-md-11">
+        <div class="card-body bg-light" style="height: 100px">
+          <h5 class="card-title"><a [routerLink]="['/my-feedback']" class="text-decoration-none">{{provedor.userName}} te enviou um feedback!</a></h5>
+          <p class="card-text"><small class="text-muted">{{ dataCriacao | date:'fullDate' }}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

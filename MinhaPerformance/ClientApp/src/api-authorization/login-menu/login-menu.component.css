@@ -1,1 +1,11 @@
+.login-menu {
+  display: inline;
+}
 
+.login-menu > ul {
+  display: none;
+}
+
+.login-menu:hover > ul {
+  display: block;
+}

@@ -1,0 +1,8 @@
+.feedback-item {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.feedback-user-thumb {
+  border-radius: 10px 0 0 10px;
+}

@@ -1,7 +1,28 @@
 <body>
-  <app-nav-menu></app-nav-menu>
-  <div class="container">
-    <router-outlet></router-outlet>
+  <main>
+    <app-nav-menu></app-nav-menu>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <div class="position-fixed bottom-0 end-0 translate-middle-x p-3" style="z-index: 11">
+    <div class="toast-container">
+      <ng-container *ngFor="let notification of this.notifications" [ngTemplateOutlet]="notificationTemplate" [ngTemplateOutletContext]="notification"></ng-container>
+    </div>
   </div>
 </body>
 
+<ng-template #notificationTemplate
+            let-id="id"
+            let-message="message"
+            let-type="type">
+  <div class="toast show align-items-center text-white border-0" [ngClass]="{'bg-success': type === NotificationType.Success, 'bg-danger': type === NotificationType.Error}" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        {{ message }}
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" (click)="this.closeNotification(id)"></button>
+    </div>
+  </div>
+</ng-template>
